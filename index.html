@@ -96,51 +96,15 @@
     text-shadow: 0 8px 34px rgba(0,0,0,.6);
   }
 
-  .spark-track {
-    position: absolute;
-    left: 2%;
-    right: 2%;
-    bottom: 0;
-    height: 8px;
-    overflow: visible;
-    pointer-events: none;
+  .letter {
+    display: inline-block;
+    animation: letterBounce 5.2s ease-in-out infinite;
+    transform-origin: center bottom;
   }
 
-  .spark {
-    position: absolute;
-    left: -4%;
-    bottom: 2px;
-    width: 74px;
-    height: 2px;
-    opacity: 0;
-    border-radius: 999px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,180,48,.25),
-      rgba(255,223,105,.95),
-      rgba(255,126,28,1),
-      transparent
-    );
-    box-shadow:
-      0 0 7px rgba(255,165,44,.95),
-      0 0 15px rgba(255,96,24,.45);
-    transform: skewX(-20deg);
-    animation: sparkFly 4.8s cubic-bezier(.18,.72,.26,1) infinite;
-  }
-
-  .spark::after {
-    content: "";
-    position: absolute;
-    right: 6px;
-    top: -2px;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #fff3b0;
-    box-shadow:
-      0 0 7px #ffd15d,
-      0 0 16px rgba(255,115,20,.95);
+  .space {
+    display: inline-block;
+    width: .32em;
   }
 
   .sub {
@@ -179,7 +143,9 @@
     overflow: hidden;
     transform: translateY(20px);
     opacity: 0;
-    animation: cardIn .7s ease forwards;
+    animation:
+      cardIn .7s ease forwards,
+      floatCard1 8.2s ease-in-out infinite;
     transition:
       transform .25s ease,
       background .25s ease,
@@ -209,10 +175,41 @@
     transform: translateX(65%);
   }
 
-  .card:nth-child(1){ animation-delay: .25s; }
-  .card:nth-child(2){ animation-delay: .45s; }
-  .card:nth-child(3){ animation-delay: .65s; }
-  .card:nth-child(4){ animation-delay: .85s; }
+  .card:nth-child(1){
+    animation-name: cardIn, floatCard1;
+    animation-duration: .7s, 8.2s;
+    animation-timing-function: ease, ease-in-out;
+    animation-delay: .25s, 0s;
+    animation-fill-mode: forwards, none;
+    animation-iteration-count: 1, infinite;
+  }
+
+  .card:nth-child(2){
+    animation-name: cardIn, floatCard2;
+    animation-duration: .7s, 9.1s;
+    animation-timing-function: ease, ease-in-out;
+    animation-delay: .45s, .7s;
+    animation-fill-mode: forwards, none;
+    animation-iteration-count: 1, infinite;
+  }
+
+  .card:nth-child(3){
+    animation-name: cardIn, floatCard3;
+    animation-duration: .7s, 8.7s;
+    animation-timing-function: ease, ease-in-out;
+    animation-delay: .65s, 1.2s;
+    animation-fill-mode: forwards, none;
+    animation-iteration-count: 1, infinite;
+  }
+
+  .card:nth-child(4){
+    animation-name: cardIn, floatCard4;
+    animation-duration: .7s, 9.4s;
+    animation-timing-function: ease, ease-in-out;
+    animation-delay: .85s, .35s;
+    animation-fill-mode: forwards, none;
+    animation-iteration-count: 1, infinite;
+  }
 
   .card:hover {
     transform: translateY(-5px) scale(1.012);
@@ -235,21 +232,12 @@
   }
 
   .details {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition:
-      max-height .35s ease,
-      opacity .35s ease,
-      margin-top .35s ease;
-    line-height: 1.45;
-    color: rgba(255,255,255,.76);
-  }
-
-  .card:hover .details {
     max-height: 180px;
     opacity: 1;
+    overflow: hidden;
     margin-top: 12px;
+    line-height: 1.45;
+    color: rgba(255,255,255,.76);
   }
 
   .bottom {
@@ -296,24 +284,47 @@
     72%,100% { transform: translateX(34%) rotate(1deg); opacity: 0; }
   }
 
-  @keyframes sparkFly {
-    0%, 62% {
-      left: -4%;
-      opacity: 0;
-      transform: translateX(0) skewX(-20deg) scaleX(.6);
-    }
-    67% {
-      opacity: 1;
-    }
-    76% {
-      opacity: 1;
-      transform: translateX(780%) skewX(-20deg) scaleX(1);
-    }
-    82%,100% {
-      left: 92%;
-      opacity: 0;
-      transform: translateX(0) skewX(-20deg) scaleX(.7);
-    }
+  @keyframes letterBounce {
+    0%, 100% { transform: translate(0,0) rotate(0deg); }
+    18%      { transform: translate(0,0) rotate(0deg); }
+    28%      { transform: translate(0,0) rotate(0deg); }
+    34%      { transform: translate(var(--x,0px), -8px) rotate(var(--r,1deg)); }
+    42%      { transform: translate(calc(var(--x,0px) * -0.35), 1px) rotate(calc(var(--r,1deg) * -0.7)); }
+    48%      { transform: translate(calc(var(--x,0px) * 0.18), -2px) rotate(calc(var(--r,1deg) * 0.45)); }
+    58%, 100% { transform: translate(0,0) rotate(0deg); }
+  }
+
+
+  /* Плавание карточек:
+     по горизонтали до ~5 px,
+     по вертикали до ~10 px.
+     У каждой карточки своя траектория. */
+  @keyframes floatCard1 {
+    0%, 100% { transform: translate(0px, 0px); }
+    25%      { transform: translate(3px, -6px); }
+    50%      { transform: translate(-2px, -8px); }
+    75%      { transform: translate(4px, -3px); }
+  }
+
+  @keyframes floatCard2 {
+    0%, 100% { transform: translate(0px, 0px); }
+    25%      { transform: translate(-4px, -4px); }
+    50%      { transform: translate(3px, -7px); }
+    75%      { transform: translate(-2px, -8px); }
+  }
+
+  @keyframes floatCard3 {
+    0%, 100% { transform: translate(0px, 0px); }
+    25%      { transform: translate(4px, -7px); }
+    50%      { transform: translate(-3px, -4px); }
+    75%      { transform: translate(2px, -8px); }
+  }
+
+  @keyframes floatCard4 {
+    0%, 100% { transform: translate(0px, 0px); }
+    25%      { transform: translate(-3px, -8px); }
+    50%      { transform: translate(4px, -5px); }
+    75%      { transform: translate(-4px, -2px); }
   }
 
   @keyframes load {
@@ -350,8 +361,7 @@
 <main>
   <section class="hero">
     <div class="title-wrap">
-      <h1>DENIS METROSTROI</h1>
-      <div class="spark-track"><div class="spark"></div></div>
+      <h1 id="mainTitle"></h1>
     </div>
 
     <div class="sub">NORANK · PUBLIC SERVER</div>
@@ -408,6 +418,36 @@
 </main>
 
 <script>
+/* Волнообразное подпрыгивание букв как в V5 */
+const titleText = "DENIS METROSTROI";
+const titleEl = document.getElementById("mainTitle");
+
+let delayIndex = 0;
+
+for (const ch of titleText) {
+  if (ch === " ") {
+    const s = document.createElement("span");
+    s.className = "space";
+    titleEl.appendChild(s);
+    continue;
+  }
+
+  const span = document.createElement("span");
+  span.className = "letter";
+  span.textContent = ch;
+
+  const delay = 0.02 + delayIndex * 0.06;
+  const x = (delayIndex % 2 === 0 ? 0.8 : -0.8).toFixed(1) + "px";
+  const r = (delayIndex % 2 === 0 ? 1.6 : -1.6).toFixed(1) + "deg";
+
+  span.style.animationDelay = delay + "s";
+  span.style.setProperty("--x", x);
+  span.style.setProperty("--r", r);
+
+  titleEl.appendChild(span);
+  delayIndex++;
+}
+
 (() => {
   const canvas = document.getElementById("smoke");
   const ctx = canvas.getContext("2d", { alpha: true });
